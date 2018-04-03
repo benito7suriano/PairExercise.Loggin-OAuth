@@ -3,6 +3,7 @@ const path = require('path')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const passport = require('passport')
 const {db} = require('./db')
 const app = express()
 const PORT = 3000
@@ -20,6 +21,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Static middleware
 app.use(express.static(path.join(__dirname, '..', 'public')))
