@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const db = new Sequelize('postgres://localhost/loggin', {logging: false})
+const db = new Sequelize('postgres://localhost/loggin', { logging: false })
 
 const User = db.define('users', {
   email: {
@@ -14,7 +14,8 @@ const User = db.define('users', {
   imageUrl: {
     type: Sequelize.STRING
   },
-  googleId: Sequelize.STRING
+  googleId: Sequelize.STRING,
+  twitterId: Sequelize.STRING
 })
 
 module.exports = {

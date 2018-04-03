@@ -1,28 +1,28 @@
-const router = require("express").Router();
-const passport = require("passport");
-const { User } = require("./db");
+const router = require('express').Router()
+const passport = require('passport')
+const { User } = require('./db')
 
 // Google authentication and login (GET /auth/google)
-router.get("/", passport.authenticate("google", { scope: "email" }));
+router.get('/', passport.authenticate('google', { scope: 'email' }))
 
 // handles the callback after Google has authenticated the user (GET /auth/google/callback)
 router.get(
-  "/callback",
-  passport.authenticate("google", {
-    successRedirect: "/home", // or wherever
-    failureRedirect: "/" // or wherever
+  '/callback',
+  passport.authenticate('google', {
+    successRedirect: '/home', // or wherever
+    failureRedirect: '/' // or wherever
   })
-);
+)
 
-const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 
 passport.use(
   new GoogleStrategy(
     {
       clientID:
-        "819666469825-pqoli9jd205dua0aqkdn07a2b64m4kvi.apps.googleusercontent.com",
-      clientSecret: "uxG80ZKmKTdF5PzMc2VrdHrl",
-      callbackURL: "http://localhost:3000/auth/google/callback"
+        '819666469825-pqoli9jd205dua0aqkdn07a2b64m4kvi.apps.googleusercontent.com',
+      clientSecret: 'uxG80ZKmKTdF5PzMc2VrdHrl',
+      callbackURL: 'http://localhost:3000/auth/google/callback'
     },
     // Google will send back the token and profile
     (token, refreshToken, profile, done) => {
@@ -32,7 +32,7 @@ passport.use(
       const info = {
         email: profile.emails[0].value,
         imageUrl: profile.photos ? profile.photos[0].value : undefined
-      };
+      }
 
       User.findOrCreate({
         where: {
@@ -41,25 +41,25 @@ passport.use(
         defaults: info
       })
         .spread(user => {
-          done(null, user);
+          done(null, user)
         })
-        .catch(done);
+        .catch(done)
     }
   )
-);
+)
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+  done(null, user.id)
+})
 
 passport.deserializeUser((id, done) => {
   User.findById(id)
     .then(user => {
-      done(null, user);
+      done(null, user)
     })
     .catch(err => {
-      done(err);
-    });
-});
+      done(err)
+    })
+})
 
-module.exports = router;
+module.exports = router

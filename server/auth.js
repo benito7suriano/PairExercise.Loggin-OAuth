@@ -42,7 +42,9 @@ router.put("/login", (req, res, next) => {
     .catch(next);
 });
 
-router.use("/google", require("./oauth"));
+router.use("/google", require("./oauth"))
+
+router.use('/twitter', require('./oauth2'))
 
 router.delete("/logout", (req, res, next) => {
   req.session.destroy();
